@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -43,19 +44,23 @@ public class DBUserHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public UserModal readItems(String login) {
+    public UserModal readItems(String login, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME, null);
+        Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE Constants.TABLE_NAME.login=login", null);
         UserModal userModal = new UserModal();
 
-        if(itemData.moveToFirst()) {
-            do {
-                if (Objects.equals(itemData.getString(1), login)) {
-                    userModal.setLogin(itemData.getString(1));
-                    userModal.setId(itemData.getInt(0));
-                    userModal.setPassword(itemData.getString(2));
-                }
-            } while (itemData.moveToNext());
+        if (Objects.equals(itemData.getString(1), login)) {
+            if (Objects.equals(itemData.getString(2), password)) {
+                userModal.setLogin(itemData.getString(1));
+                userModal.setId(itemData.getInt(0));
+                userModal.setPassword(itemData.getString(2));
+            }
+            else {
+               userModal = null;
+            }
+        }
+        else {
+            userModal = null;
         }
         itemData.close();
 

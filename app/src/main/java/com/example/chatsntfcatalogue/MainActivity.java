@@ -2,6 +2,7 @@ package com.example.chatsntfcatalogue;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,32 +28,48 @@ public class MainActivity extends AppCompatActivity {
         connexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserModal userModal = new UserModal();
+                UserModal userModal;
                 Intent i = new Intent(MainActivity.this, MenuActivity.class);
                 if (!checkIfEmpty(dbUserHandler.getWritableDatabase())) {
                     dbUserHandler.insert(login.getText().toString(), password.getText().toString());
                     Toast.makeText(MainActivity.this, "Création du compte réussi", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    if (dbUserHandler.readItems(login.getText().toString()) == null) {
+                    if (!checkIfLoginOk(dbUserHandler.getWritableDatabase(), login.getText().toString())) {
                         dbUserHandler.insert(login.getText().toString(), password.getText().toString());
                         Toast.makeText(MainActivity.this, "Création du compte réussi", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        userModal = dbUserHandler.readItems(login.getText().toString());
+                    } else if (checkIfPasswordOk(dbUserHandler.getWritableDatabase(), login.getText().toString(), password.getText().toString())) {
+                        userModal = dbUserHandler.readItems(login.getText().toString(), password.getText().toString());
                         Toast.makeText(MainActivity.this, "Connexion au compte réussi", Toast.LENGTH_LONG).show();
-                    }
+                        i.putExtra("usermodal", userModal);
+                        startActivity(i);
+                    } else Toast.makeText(MainActivity.this, "Password incorrect", Toast.LENGTH_LONG).show();
                 }
-                i.putExtra("usermodal", userModal);
-                startActivity(i);
             }
         });
     }
 
     private boolean checkIfEmpty(SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DBUserHandler.Constants.TABLE_NAME + " LIMIT 1", null);
-        boolean d = cursor.moveToFirst();
+        Cursor cursor = db.rawQuery("SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME + " LIMIT 1", null);
+        boolean checked = cursor.moveToFirst();
         cursor.close();
-        return d;
+        return checked;
+    }
+
+    private boolean checkIfLoginOk(SQLiteDatabase db, String login) {
+
+        Cursor cursor = db.rawQuery("SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME + " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + "=" + login, null);
+        boolean checked = cursor.moveToFirst();
+        cursor.close();
+        return checked;
+    }
+
+    private boolean checkIfPasswordOk(SQLiteDatabase db, String login, String password) {
+        Cursor cursor = db.rawQuery(
+                "SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME +
+                        " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + "=" + login + " AND " + DBUserHandler.Constants.KEY_COL_PASSWORD + "=" + password, null);
+        boolean checked = cursor.moveToFirst();
+        cursor.close();
+        return checked;
     }
 }
