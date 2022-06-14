@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkIfEmpty(SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("SELECT * FROM" + DBUserHandler.Constants.TABLE_NAME + "LIMIT 1", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + DBUserHandler.Constants.TABLE_NAME + " LIMIT 1", null);
         boolean d = cursor.moveToFirst();
         cursor.close();
         return d;

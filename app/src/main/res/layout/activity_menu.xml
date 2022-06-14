@@ -14,13 +14,13 @@
         tools:layout_editor_absoluteY="312dp">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/collectionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Collection" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/boutiqueBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Boutique" />
