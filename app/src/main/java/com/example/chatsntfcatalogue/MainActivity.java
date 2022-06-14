@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkIfLoginOk(SQLiteDatabase db, String login) {
 
-        Cursor cursor = db.rawQuery("SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME + " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + " = " + login, null);
+        Cursor cursor = db.rawQuery("SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME + " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + " = '" + login + "'", null);
         boolean checked = cursor.moveToFirst();
         cursor.close();
         return checked;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkIfPasswordOk(SQLiteDatabase db, String login, String password) {
         Cursor cursor = db.rawQuery(
                 "SELECT " + DBUserHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME +
-                        " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + "=" + login + " AND " + DBUserHandler.Constants.KEY_COL_PASSWORD + " = " + password, null);
+                        " WHERE " + DBUserHandler.Constants.KEY_COL_LOGIN + "= '" + login + "' AND " + DBUserHandler.Constants.KEY_COL_PASSWORD + " = '" + password + "'", null);
         boolean checked = cursor.moveToFirst();
         cursor.close();
         return checked;
