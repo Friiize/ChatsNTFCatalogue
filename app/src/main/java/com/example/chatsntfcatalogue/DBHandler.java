@@ -29,6 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
         public static final String KEY_COL_BTC = "BTC";
         public static final String KEY_COL_ETH = "ETH";
         public static final String KEY_COL_PRICE = "Price";
+        public static final String KEY_COL_USER_ID = "User_id";
         public static final String KEY_COL_IMAGE = "Image";
     }
 
@@ -45,6 +46,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 Constants.KEY_COL_BTC + " TEXT, " +
                 Constants.KEY_COL_ETH + " TEXT, " +
                 Constants.KEY_COL_PRICE + " TEXT, " +
+                Constants.KEY_COL_USER_ID + " TEXT, " +
                 Constants.KEY_COL_IMAGE + " TEXT)";
 
         db.execSQL(TABLE_CREATE);

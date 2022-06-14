@@ -7,11 +7,14 @@
     tools:context=".MenuActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="254dp"
         android:layout_height="106dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="312dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/collectionBtn"

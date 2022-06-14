@@ -18,10 +18,21 @@ public class MenuActivity extends AppCompatActivity {
         collectionBtn = findViewById(R.id.collectionBtn);
         boutiqueBtn = findViewById(R.id.boutiqueBtn);
 
+        UserModal userModal = (UserModal) getIntent().getSerializableExtra("usermodal");
         collectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MenuActivity.this, CollectionActivity.class);
+                i.putExtra("usermodal", userModal);
+                startActivity(i);
+            }
+        });
+
+        boutiqueBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MenuActivity.this, CollectionActivity.class);
+                i.putExtra("usermodal", userModal);
                 startActivity(i);
             }
         });
