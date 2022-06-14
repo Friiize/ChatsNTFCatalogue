@@ -46,7 +46,7 @@ public class DBUserHandler extends SQLiteOpenHelper {
 
     public UserModal readItems(String login, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE Constants.TABLE_NAME.login=login", null);
+        Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_LOGIN + " = " + login, null);
         UserModal userModal = new UserModal();
 
         if (Objects.equals(itemData.getString(1), login)) {
