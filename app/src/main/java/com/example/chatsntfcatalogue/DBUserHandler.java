@@ -49,19 +49,9 @@ public class DBUserHandler extends SQLiteOpenHelper {
         Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_LOGIN + " = '" + login + "'", null);
         UserModal userModal = new UserModal();
 
-        if (Objects.equals(itemData.getString(0), login)) {
-            if (Objects.equals(itemData.getString(1), password)) {
-                userModal.setLogin(itemData.getString(0));
-                userModal.setId(itemData.getInt(0));
-                userModal.setPassword(itemData.getString(1));
-            }
-            else {
-               userModal = null;
-            }
-        }
-        else {
-            userModal = null;
-        }
+        userModal.setLogin(itemData.getString(0));
+        userModal.setId(itemData.getInt(0));
+        userModal.setPassword(itemData.getString(1));
         itemData.close();
 
         return userModal;
