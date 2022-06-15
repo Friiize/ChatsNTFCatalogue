@@ -82,18 +82,17 @@ public class DBHandler extends SQLiteOpenHelper {
                 assert btcResponse != null;
                 String btcBalance = btcResponse.getJSONArray("prices").getJSONArray(0).getJSONArray(1).toString();
                 String ethBalance = ethResponse.getJSONArray("prices").getJSONArray(0).getJSONArray(1).toString();
-                Integer btcP, ethP;
-                btcP = ( Integer.parseInt(itemData.getString(3)) - Integer.parseInt(btcBalance)) / Integer.parseInt(itemData.getString(3)) * 100;
-                ethP = ( Integer.parseInt(itemData.getString(6)) - Integer.parseInt(ethBalance)) / Integer.parseInt(itemData.getString(6)) * 100;
+                int btcP = (Integer.parseInt(itemData.getString(3)) - Integer.parseInt(btcBalance)) / Integer.parseInt(itemData.getString(3)) * 100;
+                int ethP = (Integer.parseInt(itemData.getString(6)) - Integer.parseInt(ethBalance)) / Integer.parseInt(itemData.getString(6)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
                         btcBalance,
                         itemData.getString(3),
-                        btcP.toString(),
+                        Integer.toString(btcP),
                         ethBalance,
                         itemData.getString(6),
-                        ethP.toString(),
+                        Integer.toString(ethP),
                         itemData.getString(8),
                         itemData.getString(9),
                         itemData.getInt(0)));

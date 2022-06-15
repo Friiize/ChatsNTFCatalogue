@@ -31,7 +31,7 @@ public class MenuActivity extends AppCompatActivity {
         boutiqueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MenuActivity.this, CollectionActivity.class);
+                Intent i = new Intent(MenuActivity.this, BoutiqueActivity.class);
                 i.putExtra("usermodal", userModal);
                 startActivity(i);
             }

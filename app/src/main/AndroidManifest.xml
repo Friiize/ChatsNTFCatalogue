@@ -14,6 +14,9 @@
         android:theme="@style/Theme.ChatsNTFCatalogue"
         tools:targetApi="31">
         <activity
+            android:name=".BoutiqueActivity"
+            android:exported="false" />
+        <activity
             android:name=".CollectionActivity"
             android:exported="false" />
         <activity
