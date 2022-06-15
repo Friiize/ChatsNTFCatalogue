@@ -18,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     public static class Constants {
@@ -159,8 +161,8 @@ public class DBHandler extends SQLiteOpenHelper {
         StringBuilder response  = new StringBuilder();
 
         URL url = new URL("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur%2Ceth");
-        HttpURLConnection httpconn = (HttpURLConnection)url.openConnection();
-        if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK)
+        HttpsURLConnection httpconn = (HttpsURLConnection) url.openConnection();
+        if (httpconn.getResponseCode() == HttpsURLConnection.HTTP_OK)
         {
             BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()),8192);
             String strLine;
