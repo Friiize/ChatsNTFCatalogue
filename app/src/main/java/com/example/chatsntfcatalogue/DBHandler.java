@@ -65,32 +65,24 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(itemData.moveToFirst()) {
             do {
-                JSONObject btcResponse = null;
-                JSONObject ethResponse = null;
+                JSONObject response = null;
                 try {
-                    btcResponse  = new JSONObject(getResponseText("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=1"));
+                    response  = new JSONObject(getResponseText());
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
-                try {
-                    ethResponse  = new JSONObject(getResponseText("https://api.coingecko.com/api/v3/coins/ethereum-wormhole/market_chart?vs_currency=eur&days=1"));
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-
-                assert ethResponse != null;
-                assert btcResponse != null;
-                String btcBalance = btcResponse.getJSONArray("prices").getJSONArray(0).getJSONArray(1).toString();
-                String ethBalance = ethResponse.getJSONArray("prices").getJSONArray(0).getJSONArray(1).toString();
-                int btcP = (Integer.parseInt(itemData.getString(3)) - Integer.parseInt(btcBalance)) / Integer.parseInt(itemData.getString(3)) * 100;
-                int ethP = (Integer.parseInt(itemData.getString(6)) - Integer.parseInt(ethBalance)) / Integer.parseInt(itemData.getString(6)) * 100;
+                assert response != null;
+                int btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * Integer.parseInt(itemData.getString(8)));
+                int ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * Integer.parseInt(itemData.getString(8));
+                int btcP = (Integer.parseInt(itemData.getString(3)) - btcBalance) / Integer.parseInt(itemData.getString(3)) * 100;
+                int ethP = (Integer.parseInt(itemData.getString(6)) - ethBalance) / Integer.parseInt(itemData.getString(6)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
-                        btcBalance,
+                        String.valueOf(btcBalance),
                         itemData.getString(3),
                         Integer.toString(btcP),
-                        ethBalance,
+                        String.valueOf(ethBalance),
                         itemData.getString(6),
                         Integer.toString(ethP),
                         itemData.getString(8),
@@ -104,28 +96,50 @@ public class DBHandler extends SQLiteOpenHelper {
         return itemModalArrayList;
     }
 
-    public void insert(String name, String btc, String eth, String price, String image) {
+    public void insert(String name, int price, int image) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+
+        JSONObject response = null;
+        try {
+            response  = new JSONObject(getResponseText());
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        assert response != null;
+        int btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * price);
+        int ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * price;
+
         contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
-        contentValues.put(DBHandler.Constants.KEY_COL_BTC, btc);
-        contentValues.put(DBHandler.Constants.KEY_COL_ETH, eth);
-        contentValues.put(DBHandler.Constants.KEY_COL_PRICE, price);
-        contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, image);
+        contentValues.put(DBHandler.Constants.KEY_COL_BTC, btcBalance);
+        contentValues.put(DBHandler.Constants.KEY_COL_ETH, ethBalance);
+        contentValues.put(DBHandler.Constants.KEY_COL_PRICE, String.valueOf(price));
+        contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, String.valueOf(image));
 
         db.insert(DBHandler.Constants.TABLE_NAME, null, contentValues);
         db.close();
     }
 
-    public long update(long rowId, String name, String btc, String eth, String price, String image) {
+    public long update(long rowId, String name, Integer price) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.clear();
+        if (price != null) {
+            JSONObject response = null;
+            try {
+                response = new JSONObject(getResponseText());
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            assert response != null;
+            Integer ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * price;
+            Integer btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * price);
+
+            contentValues.put(DBHandler.Constants.KEY_COL_PRICE, price);
+            contentValues.put(DBHandler.Constants.KEY_COL_BTC, String.valueOf(btcBalance));
+            contentValues.put(DBHandler.Constants.KEY_COL_ETH, String.valueOf(ethBalance));
+        }
         if (name != null) contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
-        if (btc != null) contentValues.put(DBHandler.Constants.KEY_COL_BTC, btc);
-        if (eth != null) contentValues.put(DBHandler.Constants.KEY_COL_ETH, eth);
-        if (price != null) contentValues.put(DBHandler.Constants.KEY_COL_PRICE, price);
-        if (image != null) contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, image);
 
         db.update(DBHandler.Constants.TABLE_NAME, contentValues, DBHandler.Constants.KEY_COL_ID + "=" + rowId, null);
         db.close();
@@ -140,11 +154,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return rowId;
     }
 
-    private String getResponseText(String stringUrl) throws IOException
+    private String getResponseText() throws IOException
     {
         StringBuilder response  = new StringBuilder();
 
-        URL url = new URL(stringUrl);
+        URL url = new URL("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur%2Ceth");
         HttpURLConnection httpconn = (HttpURLConnection)url.openConnection();
         if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK)
         {
