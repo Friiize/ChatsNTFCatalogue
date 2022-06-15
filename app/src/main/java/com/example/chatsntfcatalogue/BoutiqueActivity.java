@@ -48,7 +48,7 @@ public class BoutiqueActivity extends AppCompatActivity {
     }
 
     private boolean checkIfEmpty(SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("SELECT " + DBHandler.Constants.KEY_COL_ID + " FROM " + DBUserHandler.Constants.TABLE_NAME + " LIMIT 1", null);
+        Cursor cursor = db.rawQuery("SELECT " + DBHandler.Constants.KEY_COL_ID + " FROM " + DBHandler.Constants.TABLE_NAME + " LIMIT 1", null);
         boolean checked = cursor.moveToFirst();
         cursor.close();
         return checked;
