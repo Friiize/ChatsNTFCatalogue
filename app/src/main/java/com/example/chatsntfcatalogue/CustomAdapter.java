@@ -24,7 +24,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View converted = activity.getLayoutInflater().inflate(R.layout.item_layout, null, true);
+        View converted = activity.getLayoutInflater().inflate(R.layout.buy_item_layout, null, true);
         return new ViewHolder(converted);
     }
 
@@ -54,14 +54,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         ViewHolder(View v) {
             super(v);
-            id = (TextView) v.findViewById(R.id.idNFT);
-            name = (TextView) v.findViewById(R.id.nameNFT);
-            btc = (TextView) v.findViewById(R.id.btcPrix);
-            btcP = (TextView) v.findViewById(R.id.btcPourcent);
-            eth = (TextView) v.findViewById(R.id.ethPrix);
-            ethP = (TextView) v.findViewById(R.id.ethPourcent);
-            price = (TextView) v.findViewById(R.id.eurPrix);
-            imageNFT = (ImageView) v.findViewById(R.id.imageNFT);
+            id = (TextView) v.findViewById(R.id.idNFTb);
+            name = (TextView) v.findViewById(R.id.nameNFTb);
+            btc = (TextView) v.findViewById(R.id.btcPrixb);
+            btcP = (TextView) v.findViewById(R.id.btcPourcentb);
+            eth = (TextView) v.findViewById(R.id.ethPrixb);
+            ethP = (TextView) v.findViewById(R.id.ethPourcentb);
+            price = (TextView) v.findViewById(R.id.eurPrixb);
+            imageNFT = (ImageView) v.findViewById(R.id.imageNFTb);
         }
     }
 }

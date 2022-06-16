@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class BoutiqueActivity extends AppCompatActivity {
@@ -29,7 +26,7 @@ public class BoutiqueActivity extends AppCompatActivity {
                 dbHandler.insert("Green", 13, R.drawable.chaton_nft_g);
                 dbHandler.insert("Green Legendary", 20, R.drawable.chaton_nft_g_l);
                 dbHandler.insert("Red", 13, R.drawable.chaton_nft_r);
-                dbHandler.insert("Blue Purple Legendary", 25, R.drawable.chaton_nft_bp_l);
+                dbHandler.insert("Purple Rose Legendary", 25, R.drawable.chaton_nft_bp_l);
                 dbHandler.insert("Original", 10, R.drawable.chaton_nft_d);
             } catch (JSONException e) {
                 e.printStackTrace();
