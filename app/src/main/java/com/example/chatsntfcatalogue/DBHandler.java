@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 String ethBS = String.format("%.8f", ethBalance);
                 String btcC = String.format("%.8f", itemData.getString(2));
                 String ethC = String.format("%.8f", itemData.getString(3));
+                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
 
                 double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
                 double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
