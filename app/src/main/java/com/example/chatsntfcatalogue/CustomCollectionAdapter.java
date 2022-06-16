@@ -3,11 +3,14 @@ package com.example.chatsntfcatalogue;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -15,10 +18,12 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
 
     private final Activity activity;
     private ArrayList<ItemModal> itemModalArrayList;
+    private static DBHandler dbHandler;
 
-    public CustomCollectionAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList) {
+    public CustomCollectionAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList, DBHandler dbHandler) {
         this.activity = activity;
         this.itemModalArrayList = itemModalArrayList;
+        CustomCollectionAdapter.dbHandler = dbHandler;
     }
 
     @NonNull
@@ -51,6 +56,7 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView id, name, btc,btcP, eth, ethP, price;
         ImageView imageNFT;
+        Button sellBtn;
 
         ViewHolder(View v) {
             super(v);
@@ -62,6 +68,19 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
             ethP = (TextView) v.findViewById(R.id.ethPourcent);
             price = (TextView) v.findViewById(R.id.eurPrix);
             imageNFT = (ImageView) v.findViewById(R.id.imageNFT);
+            sellBtn = (Button) v.findViewById(R.id.sellBtn);
+
+            sellBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    try {
+                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), -1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 }

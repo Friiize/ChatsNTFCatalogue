@@ -25,34 +25,17 @@ public class CollectionActivity extends AppCompatActivity {
         ArrayList<ItemModal> itemModalArrayList;
         DBHandler dbHandler = new DBHandler(CollectionActivity.this);
         RecyclerView itemList = findViewById(R.id.collectionRV);
-        Button sellBtn = findViewById(R.id.sellBtn);
         UserModal userModal = (UserModal) getIntent().getSerializableExtra("usermodal");
 
         try {
             itemModalArrayList = dbHandler.readItems(userModal.getId());
-            CustomCollectionAdapter customAdapter = new CustomCollectionAdapter(this, itemModalArrayList);
+            CustomCollectionAdapter customAdapter = new CustomCollectionAdapter(this, itemModalArrayList, dbHandler);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             itemList.setLayoutManager(linearLayoutManager);
             itemList.setAdapter(customAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        sellBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView nftId = findViewById(R.id.idNFT);
-                TextView nftName = findViewById(R.id.nameNFT);
-                TextView nftPrice = findViewById(R.id.eurPrix);
-
-                try {
-                    dbHandler.update(Integer.parseInt(nftId.getText().toString()), nftName.getText().toString(), Integer.parseInt(nftPrice.getText().toString()), -1);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
         dbHandler.close();
     }
 }

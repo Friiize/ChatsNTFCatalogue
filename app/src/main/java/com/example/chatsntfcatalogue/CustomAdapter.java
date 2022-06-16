@@ -3,11 +3,14 @@ package com.example.chatsntfcatalogue;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -15,10 +18,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     private final Activity activity;
     private final ArrayList<ItemModal> itemModalArrayList;
+    private static DBHandler dbHandler;
+    private static UserModal userModal;
 
-    public CustomAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList) {
+    public CustomAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList, DBHandler dbHandler, UserModal userModal) {
         this.activity = activity;
         this.itemModalArrayList = itemModalArrayList;
+        CustomAdapter.dbHandler = dbHandler;
+        CustomAdapter.userModal = userModal;
     }
 
     @NonNull
@@ -51,6 +58,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView id, name, btc,btcP, eth, ethP, price;
         ImageView imageNFT;
+        Button buyBtn;
 
         ViewHolder(View v) {
             super(v);
@@ -62,6 +70,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             ethP = (TextView) v.findViewById(R.id.ethPourcentb);
             price = (TextView) v.findViewById(R.id.eurPrixb);
             imageNFT = (ImageView) v.findViewById(R.id.imageNFTb);
+            buyBtn = (Button) v.findViewById(R.id.buyBtn);
+
+            buyBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    try {
+                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), userModal.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
 }

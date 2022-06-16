@@ -20,6 +20,7 @@ public class BoutiqueActivity extends AppCompatActivity {
         ArrayList<ItemModal> itemModalArrayList = new ArrayList<>();
         DBHandler dbHandler = new DBHandler(BoutiqueActivity.this);
         RecyclerView itemList = findViewById(R.id.boutiqueRV);
+        UserModal userModal = (UserModal) getIntent().getSerializableExtra("usermodal");
 
         if(!checkIfEmpty(dbHandler.getWritableDatabase())) {
             try {
@@ -34,7 +35,7 @@ public class BoutiqueActivity extends AppCompatActivity {
         }
         try {
             itemModalArrayList = dbHandler.readItems(-1);
-            CustomAdapter customAdapter = new CustomAdapter(this, itemModalArrayList);
+            CustomAdapter customAdapter = new CustomAdapter(this, itemModalArrayList, dbHandler, userModal);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             itemList.setLayoutManager(linearLayoutManager);
             itemList.setAdapter(customAdapter);
