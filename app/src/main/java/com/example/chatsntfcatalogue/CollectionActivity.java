@@ -25,7 +25,7 @@ public class CollectionActivity extends AppCompatActivity {
         UserModal userModal = (UserModal) getIntent().getSerializableExtra("usermodal");
 
         try {
-            itemModalArrayList = dbHandler.readCollectionItems(userModal.getId());
+            itemModalArrayList = dbHandler.readItems(userModal.getId());
             CustomCollectionAdapter customAdapter = new CustomCollectionAdapter(this, itemModalArrayList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             itemList.setLayoutManager(linearLayoutManager);

@@ -33,7 +33,7 @@ public class BoutiqueActivity extends AppCompatActivity {
             }
         }
         try {
-            itemModalArrayList = dbHandler.readItems();
+            itemModalArrayList = dbHandler.readItems(-1);
             CustomAdapter customAdapter = new CustomAdapter(this, itemModalArrayList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             itemList.setLayoutManager(linearLayoutManager);
