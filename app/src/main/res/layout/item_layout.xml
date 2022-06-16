@@ -10,17 +10,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageNFT"
-            android:layout_width="match_parent"
-            android:layout_height="158dp"
-            android:adjustViewBounds="true"
-            tools:srcCompat="@tools:sample/avatars" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="143dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageNFT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="158dp"
+                    android:adjustViewBounds="true"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="296dp"
@@ -75,7 +81,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
@@ -99,12 +105,6 @@
                         android:layout_weight="1"
                         android:text="O%" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/sellBtn"
@@ -116,4 +116,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>
