@@ -66,7 +66,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor itemData;
 
-        if (id == -1) itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME, null);
+        if (id == -1) itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + " IS NULL", null);
         else itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + "= '" + id + "'", null);
 
         ArrayList<ItemModal> itemModalArrayList = new ArrayList<>();
@@ -138,11 +138,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void update(long rowId, String name, Integer price, int userId) throws JSONException {
+    public void update(long rowId, String name, float price, int userId) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.clear();
-        if (price != null) {
+        Cursor cursor = db.rawQuery("SELECT " + Constants.KEY_COL_USER_ID + " FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + " = '" + userId  + "'", null);
+        if (price != 0.0f) {
             JSONObject response = null;
             try {
                 response = new JSONObject(getResponseText());
@@ -159,11 +160,9 @@ public class DBHandler extends SQLiteOpenHelper {
             contentValues.put(Constants.KEY_COL_ETH, ethBalance);
             contentValues.put(Constants.KEY_COL_PRICE, price);
 
-            if (userId != -1) {
-                db.rawQuery("UPDATE " + Constants.TABLE_NAME + " SET " + Constants.KEY_COL_USER_ID + " = NULL", null);
-            }
-            else {
-                db.rawQuery("UPDATE " + Constants.TABLE_NAME + " SET " + Constants.KEY_COL_USER_ID + " = '" + userId + "'", null);
+            contentValues.put(Constants.KEY_COL_USER_ID, userId);
+            if (cursor.moveToFirst()) {
+                contentValues.putNull(Constants.KEY_COL_USER_ID);
             }
         }
         if (name != null) contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);

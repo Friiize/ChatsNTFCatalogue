@@ -29,7 +29,7 @@ public class CollectionActivity extends AppCompatActivity {
 
         try {
             itemModalArrayList = dbHandler.readItems(userModal.getId());
-            CustomCollectionAdapter customAdapter = new CustomCollectionAdapter(this, itemModalArrayList, dbHandler);
+            CustomCollectionAdapter customAdapter = new CustomCollectionAdapter(this, itemModalArrayList, dbHandler, userModal);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             itemList.setLayoutManager(linearLayoutManager);
             itemList.setAdapter(customAdapter);

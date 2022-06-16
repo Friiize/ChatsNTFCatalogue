@@ -19,11 +19,14 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
     private final Activity activity;
     private ArrayList<ItemModal> itemModalArrayList;
     private static DBHandler dbHandler;
+    private static UserModal userModal;
 
-    public CustomCollectionAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList, DBHandler dbHandler) {
+    public CustomCollectionAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList, DBHandler dbHandler, UserModal userModal) {
         this.activity = activity;
         this.itemModalArrayList = itemModalArrayList;
         CustomCollectionAdapter.dbHandler = dbHandler;
+        CustomCollectionAdapter.userModal = userModal;
+
     }
 
     @NonNull
@@ -73,9 +76,12 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
             sellBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String[] arrId = id.getText().toString().split(": ");
+                    String[] arrName = name.getText().toString().split(": ");
+                    String[] arrPrice = price.getText().toString().split("€");
 
                     try {
-                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), -1);
+                        dbHandler.update(Integer.parseInt(arrId[1]), arrName[1], Float.parseFloat(arrPrice[0]), userModal.getId());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

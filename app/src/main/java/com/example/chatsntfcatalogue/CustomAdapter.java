@@ -81,7 +81,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     String[] arrPrice = price.getText().toString().split("€");
 
                     try {
-                        dbHandler.update(Integer.parseInt(arrId[1]), arrName[1], Integer.parseInt(arrPrice[0]), userModal.getId());
+                        dbHandler.update(Integer.parseInt(arrId[1]), arrName[1], Float.parseFloat(arrPrice[0]), userModal.getId());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
