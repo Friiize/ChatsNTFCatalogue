@@ -50,9 +50,9 @@ public class DBUserHandler extends SQLiteOpenHelper {
         UserModal userModal = new UserModal();
 
         if (itemData.moveToFirst()) {
-            userModal.setLogin(itemData.getString(0));
+            userModal.setLogin(itemData.getString(1));
             userModal.setId(itemData.getInt(0));
-            userModal.setPassword(itemData.getString(1));
+            userModal.setPassword(itemData.getString(2));
         }
         itemData.close();
 
