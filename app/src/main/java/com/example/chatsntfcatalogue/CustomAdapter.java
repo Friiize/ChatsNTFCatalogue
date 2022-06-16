@@ -1,6 +1,7 @@
 package com.example.chatsntfcatalogue;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -75,12 +76,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             buyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String[] arrSt = id.getText().toString().split(": ");
+                    Log.i("str", arrSt[0]);
 
-                    try {
-                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), userModal.getId());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), userModal.getId());
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             });
         }
