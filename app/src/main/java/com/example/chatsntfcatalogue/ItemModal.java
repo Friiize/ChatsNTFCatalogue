@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public class ItemModal implements Serializable {
     private String name;
-    private String btc;
-    private String btcP;
-    private String btcPrev;
-    private String eth;
-    private String ethPrev;
-    private String ethP;
-    private String price;
+    private float btc;
+    private float btcP;
+    private float btcPrev;
+    private float eth;
+    private float ethPrev;
+    private float ethP;
+    private float price;
     private String image;
     private int id;
     private int user_id;
 
-    ItemModal(String name, String btc, String btcPrev, String btcP, String eth, String ethPrev, String ethP, String price, String image, int id) {
+    ItemModal(String name, float btc, float btcPrev, float btcP, float eth, float ethPrev, float ethP, float price, String image, int id) {
         this.id = id;
         this.name = name;
         this.btc = btc;
@@ -40,31 +40,31 @@ public class ItemModal implements Serializable {
         return name;
     }
 
-    public String getBtc() {
+    public float getBtc() {
         return btc;
     }
 
-    public String getBtcPrev() {
+    public float getBtcPrev() {
         return btcPrev;
     }
 
-    public String getBtcP() {
+    public float getBtcP() {
         return btcP;
     }
 
-    public String getEth() {
+    public float getEth() {
         return eth;
     }
 
-    public String getEthPrev() {
+    public float getEthPrev() {
         return ethPrev;
     }
 
-    public String getEthP() {
+    public float getEthP() {
         return ethP;
     }
 
-    public String getPrice() {
+    public float getPrice() {
         return price;
     }
 
@@ -84,31 +84,31 @@ public class ItemModal implements Serializable {
         this.name = name;
     }
 
-    public void setBtc(String btc) {
+    public void setBtc(float btc) {
         this.btc = btc;
     }
 
-    public void setBtcPrev(String btcPrev) {
+    public void setBtcPrev(float btcPrev) {
         this.btcPrev = btcPrev;
     }
 
-    public void setBtcP(String btcP) {
+    public void setBtcP(float btcP) {
         this.btcP = btcP;
     }
 
-    public void setEth(String eth) {
+    public void setEth(float eth) {
         this.eth = eth;
     }
 
-    public void setEthPrev(String ethPrev) {
+    public void setEthPrev(float ethPrev) {
         this.ethPrev = ethPrev;
     }
 
-    public void setEthP(String ethP) {
+    public void setEthP(float ethP) {
         this.ethP = ethP;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

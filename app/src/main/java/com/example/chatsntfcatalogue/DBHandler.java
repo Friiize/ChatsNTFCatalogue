@@ -11,15 +11,12 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -50,10 +47,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 Constants.TABLE_NAME + "(" +
                 Constants.KEY_COL_ID + " integer primary key autoincrement, " +
                 Constants.KEY_COL_NAME + " TEXT, " +
-                Constants.KEY_COL_BTC + " TEXT, " +
-                Constants.KEY_COL_ETH + " TEXT, " +
-                Constants.KEY_COL_PRICE + " TEXT, " +
-                Constants.KEY_COL_USER_ID + " TEXT, " +
+                Constants.KEY_COL_BTC + " REAL, " +
+                Constants.KEY_COL_ETH + " REAL, " +
+                Constants.KEY_COL_PRICE + " REAL, " +
+                Constants.KEY_COL_USER_ID + " INTEGER, " +
                 Constants.KEY_COL_IMAGE + " TEXT)";
 
         db.execSQL(TABLE_CREATE);
@@ -68,11 +65,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<ItemModal> readItems(int id) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor itemData;
-        if (id == -1) {
-            itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME, null);
-        } else {
-            itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + "= '" + id + "'", null);
-        }
+
+        if (id == -1) itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME, null);
+        else itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + "= '" + id + "'", null);
+
         ArrayList<ItemModal> itemModalArrayList = new ArrayList<>();
 
         if(itemData.moveToFirst()) {
@@ -87,10 +83,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 Log.i("dtc", itemData.getString(2));
                 JSONObject eurObj = response.getJSONObject("bitcoin");
                 JSONObject ethObj = response.getJSONObject("bitcoin");
-                double btcBalance = (1 / eurObj.getDouble("eur") * Double.parseDouble(itemData.getString(4)));
-                double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * Double.parseDouble(itemData.getString(4));
-                String btcBS = String.format("%.8f", btcBalance);
-                String ethBS = String.format("%.8f", ethBalance);
+                float btcBalance = (float) (1 / eurObj.getDouble("eur") * itemData.getFloat(4));
+                float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * itemData.getFloat(4);
 //                String btcC = String.format("%.8f", itemData.getString(2));
 //                String ethC = String.format("%.8f", itemData.getString(3));
 //                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
@@ -100,13 +94,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
-                        btcBS,
-                        itemData.getString(2),
-                        "0",
-                        ethBS,
-                        itemData.getString(3),
-                        "0",
-                        itemData.getString(4),
+                        btcBalance,
+                        itemData.getFloat(2),
+                        0,
+                        ethBalance,
+                        itemData.getFloat(3),
+                        0,
+                        itemData.getFloat(4),
                         itemData.getString(6),
                         itemData.getInt(0)));
 
@@ -131,20 +125,20 @@ public class DBHandler extends SQLiteOpenHelper {
         assert response != null;
         JSONObject eurObj = response.getJSONObject("bitcoin");
         JSONObject ethObj = response.getJSONObject("bitcoin");
-        double btcBalance = (1 / eurObj.getDouble("eur") * price);
-        double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
+        float btcBalance = (float) (1 / eurObj.getDouble("eur") * price);
+        float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
         contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
-        contentValues.put(DBHandler.Constants.KEY_COL_BTC, String.format("%.8f",btcBalance));
-        contentValues.put(DBHandler.Constants.KEY_COL_ETH, String.format("%.8f", ethBalance));
-        contentValues.put(DBHandler.Constants.KEY_COL_PRICE, String.valueOf(price));
+        contentValues.put(Constants.KEY_COL_BTC, btcBalance);
+        contentValues.put(Constants.KEY_COL_ETH, ethBalance);
+        contentValues.put(Constants.KEY_COL_PRICE, price);
         contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, String.valueOf(image));
 
         db.insert(DBHandler.Constants.TABLE_NAME, null, contentValues);
         db.close();
     }
 
-    public long update(long rowId, String name, Integer price) throws JSONException {
+    public void update(long rowId, String name, Integer price, int userId) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.clear();
@@ -158,18 +152,24 @@ public class DBHandler extends SQLiteOpenHelper {
             assert response != null;
             JSONObject eurObj = response.getJSONObject("bitcoin");
             JSONObject ethObj = response.getJSONObject("bitcoin");
-            double btcBalance = (1 / eurObj.getDouble("eur")) * price;
-            double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
+            float btcBalance = (float) (1 / eurObj.getDouble("eur") * price);
+            float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
-            contentValues.put(DBHandler.Constants.KEY_COL_PRICE, price);
-            contentValues.put(DBHandler.Constants.KEY_COL_BTC, String.valueOf(btcBalance));
-            contentValues.put(DBHandler.Constants.KEY_COL_ETH, String.valueOf(ethBalance));
+            contentValues.put(Constants.KEY_COL_BTC, btcBalance);
+            contentValues.put(Constants.KEY_COL_ETH, ethBalance);
+            contentValues.put(Constants.KEY_COL_PRICE, price);
+
+            if (userId != -1) {
+                db.rawQuery("UPDATE " + Constants.TABLE_NAME + " SET " + Constants.KEY_COL_USER_ID + " = NULL", null);
+            }
+            else {
+                db.rawQuery("UPDATE " + Constants.TABLE_NAME + " SET " + Constants.KEY_COL_USER_ID + " = '" + userId + "'", null);
+            }
         }
         if (name != null) contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
 
         db.update(DBHandler.Constants.TABLE_NAME, contentValues, DBHandler.Constants.KEY_COL_ID + "=" + rowId, null);
         db.close();
-        return rowId;
     }
 
     public long delete(long rowId) {

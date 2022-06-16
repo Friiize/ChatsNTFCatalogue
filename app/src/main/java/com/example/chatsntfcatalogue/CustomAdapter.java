@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
     private final Activity activity;
-    private ArrayList<ItemModal> itemModalArrayList;
+    private final ArrayList<ItemModal> itemModalArrayList;
 
     public CustomAdapter(@NonNull Activity activity, ArrayList<ItemModal> itemModalArrayList) {
         this.activity = activity;

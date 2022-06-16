@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -22,6 +25,7 @@ public class CollectionActivity extends AppCompatActivity {
         ArrayList<ItemModal> itemModalArrayList;
         DBHandler dbHandler = new DBHandler(CollectionActivity.this);
         RecyclerView itemList = findViewById(R.id.collectionRV);
+        Button sellBtn = findViewById(R.id.sellBtn);
         UserModal userModal = (UserModal) getIntent().getSerializableExtra("usermodal");
 
         try {
@@ -33,6 +37,22 @@ public class CollectionActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        sellBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView nftId = findViewById(R.id.idNFT);
+                TextView nftName = findViewById(R.id.nameNFT);
+                TextView nftPrice = findViewById(R.id.eurPrix);
+
+                try {
+                    dbHandler.update(Integer.parseInt(nftId.getText().toString()), nftName.getText().toString(), Integer.parseInt(nftPrice.getText().toString()), -1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         dbHandler.close();
     }
 }
