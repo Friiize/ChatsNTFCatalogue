@@ -23,7 +23,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View converted = activity.getLayoutInflater().inflate(R.layout.item_layout, null, true);
+        View converted = activity.getLayoutInflater().inflate(R.layout.buy_item_layout, null, true);
         return new ViewHolder(converted);
     }
 
