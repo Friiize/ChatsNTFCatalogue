@@ -24,7 +24,7 @@ public class BoutiqueActivity extends AppCompatActivity {
         DBHandler dbHandler = new DBHandler(BoutiqueActivity.this);
         RecyclerView itemList = findViewById(R.id.boutiqueRV);
 
-        if(checkIfEmpty(dbHandler.getWritableDatabase())) {
+        if(!checkIfEmpty(dbHandler.getWritableDatabase())) {
             try {
                 dbHandler.insert("Green", 13, R.drawable.chaton_nft_g);
                 dbHandler.insert("Green Legendary", 20, R.drawable.chaton_nft_g_l);

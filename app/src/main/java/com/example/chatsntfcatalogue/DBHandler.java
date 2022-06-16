@@ -1,13 +1,17 @@
 package com.example.chatsntfcatalogue;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.StrictMode;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,7 +63,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_NAME);
         onCreate(db);
     }
-
+    @SuppressLint("DefaultLocale")
     public ArrayList<ItemModal> readItems() throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME, null);
@@ -74,19 +78,27 @@ public class DBHandler extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
                 assert response != null;
-                int btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * Integer.parseInt(itemData.getString(8)));
-                int ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * Integer.parseInt(itemData.getString(8));
-                int btcP = (Integer.parseInt(itemData.getString(3)) - btcBalance) / Integer.parseInt(itemData.getString(3)) * 100;
-                int ethP = (Integer.parseInt(itemData.getString(6)) - ethBalance) / Integer.parseInt(itemData.getString(6)) * 100;
+                Log.i("dtc", itemData.getString(2));
+                JSONObject eurObj = response.getJSONObject("bitcoin");
+                JSONObject ethObj = response.getJSONObject("bitcoin");
+                double btcBalance = (1 / eurObj.getDouble("eur") * Double.parseDouble(itemData.getString(4)));
+                double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * Double.parseDouble(itemData.getString(4));
+                String btcBS = String.format("%.8f", btcBalance);
+                String ethBS = String.format("%.8f", ethBalance);
+                String btcC = String.format("%.8f", itemData.getString(2));
+                String ethC = String.format("%.8f", itemData.getString(3));
+
+                double btcP =  (Integer.parseInt(btcBS) - ((double) itemData.getString(2)) / btcC) * 100;
+                double ethP =  (Integer.parseInt(ethBS) - itemData.getDouble(3) / itemData.getDouble(3)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
                         String.valueOf(btcBalance),
                         itemData.getString(3),
-                        Integer.toString(btcP),
+                        Double.toString(btcP),
                         String.valueOf(ethBalance),
                         itemData.getString(6),
-                        Integer.toString(ethP),
+                        Double.toString(ethP),
                         itemData.getString(8),
                         itemData.getString(9),
                         itemData.getInt(0)));
@@ -98,6 +110,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return itemModalArrayList;
     }
 
+    @SuppressLint("DefaultLocale")
     public void insert(String name, int price, int image) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -109,12 +122,14 @@ public class DBHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         assert response != null;
-        int btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * price);
-        int ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * price;
+        JSONObject eurObj = response.getJSONObject("bitcoin");
+        JSONObject ethObj = response.getJSONObject("bitcoin");
+        double btcBalance = (1 / eurObj.getDouble("eur") * price);
+        double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
         contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
-        contentValues.put(DBHandler.Constants.KEY_COL_BTC, btcBalance);
-        contentValues.put(DBHandler.Constants.KEY_COL_ETH, ethBalance);
+        contentValues.put(DBHandler.Constants.KEY_COL_BTC, String.format("%.8f",btcBalance));
+        contentValues.put(DBHandler.Constants.KEY_COL_ETH, String.format("%.8f", ethBalance));
         contentValues.put(DBHandler.Constants.KEY_COL_PRICE, String.valueOf(price));
         contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, String.valueOf(image));
 
@@ -159,12 +174,16 @@ public class DBHandler extends SQLiteOpenHelper {
     private String getResponseText() throws IOException
     {
         StringBuilder response  = new StringBuilder();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
+        StrictMode.setThreadPolicy(policy);
         URL url = new URL("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur%2Ceth");
-        HttpsURLConnection httpconn = (HttpsURLConnection) url.openConnection();
-        if (httpconn.getResponseCode() == HttpsURLConnection.HTTP_OK)
+        HttpsURLConnection https = (HttpsURLConnection)url.openConnection();
+//        https.setRequestProperty("User-Agent", "chat-on-nft-app-v0.5");
+//        https.setRequestProperty("Accept", "application/json");
+        if (https.getResponseCode() == HttpsURLConnection.HTTP_OK)
         {
-            BufferedReader input = new BufferedReader(new InputStreamReader(httpconn.getInputStream()),8192);
+            BufferedReader input = new BufferedReader(new InputStreamReader(https.getInputStream()),8192);
             String strLine;
             while ((strLine = input.readLine()) != null)
             {
