@@ -32,13 +32,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder viewH, int position) {
 
         ItemModal itemModal = itemModalArrayList.get(position);
-        viewH.id.setText(String.valueOf(itemModal.getId()));
-        viewH.name.setText(itemModal.getName());
-        viewH.price.setText(itemModal.getPrice() + '€');
-        viewH.btc.setText(itemModal.getBtc() + "BTC");
-        viewH.btcP.setText(itemModal.getBtcP() + '%');
-        viewH.eth.setText(itemModal.getEth() + "ETH");
-        viewH.ethP.setText(itemModal.getEthP() + '%');
+        viewH.id.setText("NFT Id: " + itemModal.getId());
+        viewH.name.setText("Nom: " + itemModal.getName());
+        viewH.price.setText(itemModal.getPrice() + "€");
+        viewH.btc.setText(itemModal.getBtc() + " BTC");
+        viewH.btcP.setText(itemModal.getBtcP() + " %");
+        viewH.eth.setText(itemModal.getEth() + " ETH");
+        viewH.ethP.setText(itemModal.getEthP() + " %");
         viewH.imageNFT.setImageResource(Integer.parseInt(itemModal.getImage()));
 
     }
