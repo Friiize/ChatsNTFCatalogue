@@ -3,6 +3,7 @@ package com.example.chatsntfcatalogue;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View converted = activity.getLayoutInflater().inflate(R.layout.buy_item_layout, null, true);
+        View converted = activity.getLayoutInflater().inflate(R.layout.item_layout, null, true);
         return new ViewHolder(converted);
     }
 
@@ -38,6 +39,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         viewH.btcP.setText(itemModal.getBtcP() + '%');
         viewH.eth.setText(itemModal.getEth() + "ETH");
         viewH.ethP.setText(itemModal.getEthP() + '%');
+        viewH.imageNFT.setImageResource(Integer.parseInt(itemModal.getImage()));
 
     }
 
@@ -48,6 +50,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView id, name, btc,btcP, eth, ethP, price;
+        ImageView imageNFT;
 
         ViewHolder(View v) {
             super(v);
@@ -58,6 +61,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             eth = (TextView) v.findViewById(R.id.ethPrix);
             ethP = (TextView) v.findViewById(R.id.ethPourcent);
             price = (TextView) v.findViewById(R.id.eurPrix);
+            imageNFT = (ImageView) v.findViewById(R.id.imageNFT);
         }
     }
 }
