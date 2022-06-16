@@ -76,14 +76,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             buyBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String[] arrSt = id.getText().toString().split(": ");
-                    Log.i("str", arrSt[0]);
+                    String[] arrId = id.getText().toString().split(": ");
+                    String[] arrName = name.getText().toString().split(": ");
+                    String[] arrPrice = price.getText().toString().split("€");
+                    Log.i("str", arrName[1]);
+                    Log.i("str", arrPrice[0]);
 
-//                    try {
-//                        dbHandler.update(Integer.parseInt(id.getText().toString()), name.getText().toString(), Integer.parseInt(price.getText().toString()), userModal.getId());
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+
+                    try {
+                        dbHandler.update(Integer.parseInt(arrId[1]), name.getText().toString(), Integer.parseInt(price.getText().toString()), userModal.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
