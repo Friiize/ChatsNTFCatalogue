@@ -88,8 +88,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 String btcC = String.format("%.8f", itemData.getString(2));
                 String ethC = String.format("%.8f", itemData.getString(3));
 
-                double btcP =  (Integer.parseInt(btcBS) - ((double) itemData.getString(2)) / btcC) * 100;
-                double ethP =  (Integer.parseInt(ethBS) - itemData.getDouble(3) / itemData.getDouble(3)) * 100;
+                double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
+                double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
@@ -149,8 +149,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
             assert response != null;
-            Integer ethBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) / Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString())) * price;
-            Integer btcBalance = (Integer.parseInt(response.getJSONArray("bitcoin").getJSONArray(0).toString()) * price);
+            JSONObject eurObj = response.getJSONObject("bitcoin");
+            JSONObject ethObj = response.getJSONObject("bitcoin");
+            double btcBalance = (1 / eurObj.getDouble("eur")) * price;
+            double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
             contentValues.put(DBHandler.Constants.KEY_COL_PRICE, price);
             contentValues.put(DBHandler.Constants.KEY_COL_BTC, String.valueOf(btcBalance));
@@ -179,8 +181,7 @@ public class DBHandler extends SQLiteOpenHelper {
         StrictMode.setThreadPolicy(policy);
         URL url = new URL("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur%2Ceth");
         HttpsURLConnection https = (HttpsURLConnection)url.openConnection();
-//        https.setRequestProperty("User-Agent", "chat-on-nft-app-v0.5");
-//        https.setRequestProperty("Accept", "application/json");
+
         if (https.getResponseCode() == HttpsURLConnection.HTTP_OK)
         {
             BufferedReader input = new BufferedReader(new InputStreamReader(https.getInputStream()),8192);
