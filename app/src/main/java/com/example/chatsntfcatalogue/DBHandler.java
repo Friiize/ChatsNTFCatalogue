@@ -111,7 +111,52 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return itemModalArrayList;
     }
+    public ArrayList<ItemModal> readCollectionItems(int id) throws JSONException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor itemData = db.rawQuery("SELECT * FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + " = '" + id + "'", null);
+        ArrayList<ItemModal> itemModalArrayList = new ArrayList<>();
 
+        if(itemData.moveToFirst()) {
+            do {
+                JSONObject response = null;
+                try {
+                    response  = new JSONObject(getResponseText());
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+                assert response != null;
+                Log.i("dtc", itemData.getString(2));
+                JSONObject eurObj = response.getJSONObject("bitcoin");
+                JSONObject ethObj = response.getJSONObject("bitcoin");
+                double btcBalance = (1 / eurObj.getDouble("eur") * Double.parseDouble(itemData.getString(4)));
+                double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * Double.parseDouble(itemData.getString(4));
+                String btcBS = String.format("%.8f", btcBalance);
+                String ethBS = String.format("%.8f", ethBalance);
+//                String btcC = String.format("%.8f", itemData.getString(2));
+//                String ethC = String.format("%.8f", itemData.getString(3));
+//                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
+//
+//                double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
+//                double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
+
+                itemModalArrayList.add(new ItemModal(
+                        itemData.getString(1),
+                        btcBS,
+                        itemData.getString(3),
+                        "0",
+                        ethBS,
+                        itemData.getString(6),
+                        "0",
+                        itemData.getString(8),
+                        itemData.getString(9),
+                        itemData.getInt(0)));
+
+            } while (itemData.moveToNext());
+        }
+        itemData.close();
+
+        return itemModalArrayList;
+    }
     @SuppressLint("DefaultLocale")
     public void insert(String name, int price, int image) throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
