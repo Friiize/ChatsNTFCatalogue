@@ -84,23 +84,23 @@ public class DBHandler extends SQLiteOpenHelper {
                 JSONObject ethObj = response.getJSONObject("bitcoin");
                 double btcBalance = (1 / eurObj.getDouble("eur") * Double.parseDouble(itemData.getString(4)));
                 double ethBalance = (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * Double.parseDouble(itemData.getString(4));
-                String btcBS = String.format("%.8f", btcBalance);
-                String ethBS = String.format("%.8f", ethBalance);
-                String btcC = String.format("%.8f", itemData.getString(2));
-                String ethC = String.format("%.8f", itemData.getString(3));
-                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
-
-                double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
-                double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
+//                String btcBS = String.format("%.8f", btcBalance);
+//                String ethBS = String.format("%.8f", ethBalance);
+//                String btcC = String.format("%.8f", itemData.getString(2));
+//                String ethC = String.format("%.8f", itemData.getString(3));
+//                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
+//
+//                double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
+//                double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
                         String.valueOf(btcBalance),
                         itemData.getString(3),
-                        Double.toString(btcP),
+                        "0",
                         String.valueOf(ethBalance),
                         itemData.getString(6),
-                        Double.toString(ethP),
+                        "0",
                         itemData.getString(8),
                         itemData.getString(9),
                         itemData.getInt(0)));
