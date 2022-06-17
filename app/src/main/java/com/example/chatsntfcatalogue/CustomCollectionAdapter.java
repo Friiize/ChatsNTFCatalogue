@@ -56,7 +56,7 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
         return itemModalArrayList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+     class ViewHolder extends RecyclerView.ViewHolder {
         TextView id, name, btc,btcP, eth, ethP, price;
         ImageView imageNFT;
         Button sellBtn;
@@ -82,6 +82,8 @@ public class CustomCollectionAdapter extends RecyclerView.Adapter<CustomCollecti
 
                     try {
                         dbHandler.update(Integer.parseInt(arrId[1]), arrName[1], Float.parseFloat(arrPrice[0]), userModal.getId());
+                        itemModalArrayList.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
