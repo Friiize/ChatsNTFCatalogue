@@ -138,7 +138,10 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.clear();
-        Cursor cursor = db.rawQuery("SELECT " + Constants.KEY_COL_USER_ID + " FROM " + Constants.TABLE_NAME + " WHERE " + Constants.KEY_COL_USER_ID + " = '" + userId  + "'", null);
+        Cursor cursor = db.rawQuery(
+                "SELECT " + Constants.KEY_COL_USER_ID +
+                        " FROM " + Constants.TABLE_NAME +
+                        " WHERE " + Constants.KEY_COL_ID + " = '" + rowId  + "' AND " + Constants.KEY_COL_USER_ID + " = '" + userId  + "'", null);
         if (price != 0.0f) {
             JSONObject response = null;
             try {
