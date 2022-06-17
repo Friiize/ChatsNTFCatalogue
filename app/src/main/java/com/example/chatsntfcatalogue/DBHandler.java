@@ -80,26 +80,22 @@ public class DBHandler extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
                 assert response != null;
-                Log.i("dtc", itemData.getString(2));
                 JSONObject eurObj = response.getJSONObject("bitcoin");
                 JSONObject ethObj = response.getJSONObject("bitcoin");
                 float btcBalance = (float) (1 / eurObj.getDouble("eur") * itemData.getFloat(4));
                 float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * itemData.getFloat(4);
-//                String btcC = String.format("%.8f", itemData.getString(2));
-//                String ethC = String.format("%.8f", itemData.getString(3));
-//                BigDecimal eth =  BigDecimal.valueOf(itemData.getDouble(2));
-//
-//                double btcP =  ((Double.parseDouble(btcBS) - Double.parseDouble(itemData.getString(2))) / Double.parseDouble(btcC)) * 100;
-//                double ethP =  ((Double.parseDouble(ethBS) - Double.parseDouble(itemData.getString(3))) / Double.parseDouble(ethC)) * 100;
+
+                float btcP =  ((btcBalance - itemData.getFloat(2)) / itemData.getFloat(2)) * 100;
+                float ethP =  ((ethBalance - itemData.getFloat(3)) / itemData.getFloat(3)) * 100;
 
                 itemModalArrayList.add(new ItemModal(
                         itemData.getString(1),
                         btcBalance,
                         itemData.getFloat(2),
-                        0,
+                        btcP,
                         ethBalance,
                         itemData.getFloat(3),
-                        0,
+                        ethP,
                         itemData.getFloat(4),
                         itemData.getString(6),
                         itemData.getInt(0)));
@@ -129,8 +125,8 @@ public class DBHandler extends SQLiteOpenHelper {
         float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
         contentValues.put(DBHandler.Constants.KEY_COL_NAME, name);
-        contentValues.put(Constants.KEY_COL_BTC, btcBalance);
-        contentValues.put(Constants.KEY_COL_ETH, ethBalance);
+        contentValues.put(Constants.KEY_COL_BTC, String.format("%.8f", btcBalance));
+        contentValues.put(Constants.KEY_COL_ETH, String.format("%.8f", ethBalance));
         contentValues.put(Constants.KEY_COL_PRICE, price);
         contentValues.put(DBHandler.Constants.KEY_COL_IMAGE, String.valueOf(image));
 
@@ -156,8 +152,8 @@ public class DBHandler extends SQLiteOpenHelper {
             float btcBalance = (float) (1 / eurObj.getDouble("eur") * price);
             float ethBalance = (float) (1 / ((eurObj.getDouble("eur") / ethObj.getDouble("eth")))) * price;
 
-            contentValues.put(Constants.KEY_COL_BTC, btcBalance);
-            contentValues.put(Constants.KEY_COL_ETH, ethBalance);
+            contentValues.put(Constants.KEY_COL_BTC, String.format("%.8f", btcBalance));
+            contentValues.put(Constants.KEY_COL_ETH, String.format("%.8f", ethBalance));
             contentValues.put(Constants.KEY_COL_PRICE, price);
 
             contentValues.put(Constants.KEY_COL_USER_ID, userId);
