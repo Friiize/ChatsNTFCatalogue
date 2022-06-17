@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public class ItemModal implements Serializable {
     private String name;
-    private float btc;
-    private float btcP;
+    private String btc;
+    private String btcP;
     private float btcPrev;
-    private float eth;
+    private String eth;
     private float ethPrev;
-    private float ethP;
+    private String ethP;
     private float price;
     private String image;
     private int id;
     private int user_id;
 
-    ItemModal(String name, float btc, float btcPrev, float btcP, float eth, float ethPrev, float ethP, float price, String image, int id) {
+    ItemModal(String name, String btc, float btcPrev, String btcP, String eth, float ethPrev, String ethP, float price, String image, int id) {
         this.id = id;
         this.name = name;
         this.btc = btc;
@@ -40,7 +40,7 @@ public class ItemModal implements Serializable {
         return name;
     }
 
-    public float getBtc() {
+    public String getBtc() {
         return btc;
     }
 
@@ -48,11 +48,11 @@ public class ItemModal implements Serializable {
         return btcPrev;
     }
 
-    public float getBtcP() {
+    public String getBtcP() {
         return btcP;
     }
 
-    public float getEth() {
+    public String getEth() {
         return eth;
     }
 
@@ -60,7 +60,7 @@ public class ItemModal implements Serializable {
         return ethPrev;
     }
 
-    public float getEthP() {
+    public String getEthP() {
         return ethP;
     }
 
@@ -84,7 +84,7 @@ public class ItemModal implements Serializable {
         this.name = name;
     }
 
-    public void setBtc(float btc) {
+    public void setBtc(String btc) {
         this.btc = btc;
     }
 
@@ -92,11 +92,11 @@ public class ItemModal implements Serializable {
         this.btcPrev = btcPrev;
     }
 
-    public void setBtcP(float btcP) {
+    public void setBtcP(String btcP) {
         this.btcP = btcP;
     }
 
-    public void setEth(float eth) {
+    public void setEth(String eth) {
         this.eth = eth;
     }
 
@@ -104,7 +104,7 @@ public class ItemModal implements Serializable {
         this.ethPrev = ethPrev;
     }
 
-    public void setEthP(float ethP) {
+    public void setEthP(String ethP) {
         this.ethP = ethP;
     }
 
